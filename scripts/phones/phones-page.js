@@ -7,9 +7,15 @@ export default class PhonesPage {
 
     this._render();
 
-    new PhoneCatalog({
+    this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
+    });
+
+    this._catalogue.on('phone-selected', (event) => {
+      let phoneId = event.detail;
+
+      console.log(phoneId);
     });
   }
 

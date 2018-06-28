@@ -8,13 +8,15 @@ export default class PhoneCatalog extends Component {
 
     this._render();
 
-    this.on('click', '[data-element="phone"]', this._onPhoneClick);
+    this.on('click', '[data-element="phone"]', (event) => {
+      this._onPhoneClick(event);
+    });
   }
 
   _onPhoneClick(event) {
     let phoneElement = event.delegateTarget;
 
-    console.log(phoneElement);
+    this.trigger('phone-selected', phoneElement.dataset.phoneId);
   }
 
   _render() {
@@ -22,7 +24,10 @@ export default class PhoneCatalog extends Component {
       <ul class="phones">
         ${this._phones.map(phone => `
           
-          <li class="thumbnail" data-element="phone">
+          <li class="thumbnail"
+              data-element="phone"
+              data-phone-id="${ phone.id }">
+              
             <a href="#!/phones/${ phone.id }" class="thumb">
               <img
                 alt="${ phone.name }"

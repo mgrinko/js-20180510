@@ -22,4 +22,10 @@ export default class Component {
       handler(event);
     });
   }
+
+  trigger(eventName, detail) {
+    let event = new CustomEvent(eventName, { detail });
+
+    this._element.dispatchEvent(event);
+  }
 }
