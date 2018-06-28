@@ -1,11 +1,20 @@
-'use strict';
+import Component from '../../component.js';
 
-export default class PhoneCatalog {
+export default class PhoneCatalog extends Component {
   constructor({ element, phones }) {
-    this._element = element;
+    super({ element });
+
     this._phones = phones;
 
     this._render();
+
+    this.on('click', '[data-element="phone"]', this._onPhoneClick);
+  }
+
+  _onPhoneClick(event) {
+    let phoneElement = event.delegateTarget;
+
+    console.log(phoneElement);
   }
 
   _render() {
@@ -13,7 +22,7 @@ export default class PhoneCatalog {
       <ul class="phones">
         ${this._phones.map(phone => `
           
-          <li class="thumbnail">
+          <li class="thumbnail" data-element="phone">
             <a href="#!/phones/${ phone.id }" class="thumb">
               <img
                 alt="${ phone.name }"
