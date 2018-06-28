@@ -3,6 +3,14 @@ export default class Component {
     this._element = element;
   }
 
+  show() {
+    this._element.classList.remove('js-hidden');
+  }
+
+  hide() {
+    this._element.classList.add('js-hidden');
+  }
+
   on(eventName, selector, handler) {
     if (!handler) {
       this._element.addEventListener(eventName, selector);
