@@ -1,10 +1,12 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
+import Sidebar from './components/sidebar.js';
+import Component from '../component.js';
 
-export default class PhonesPage {
+export default class PhonesPage extends Component {
   constructor({ element }) {
-    this._element = element;
+    super({ element });
 
     this._render();
 
@@ -13,8 +15,22 @@ export default class PhonesPage {
       phones: PhoneService.getPhones(),
     });
 
+    this._sidebar = new Sidebar({
+        element: this._element.querySelector('[data-component="sidebar"]'),
+    });
+
+    this._sidebar.on('change', '.sort-form', (event) => {
+          this._catalogue = new PhoneCatalog({
+              element: this._element.querySelector('[data-component="phone-catalog"]'),
+              phones: event.delegateTarget.value === 'age' ?
+                  PhoneService.getPhones() :
+                  PhoneService.getPhonesSortedByName()
+          });
+     });
+
     this._catalogue.on('phone-selected', (event) => {
-      let phoneId = event.detail;
+        console.log(event);
+        let phoneId = event.detail;
       let phoneDetails = PhoneService.getPhone(phoneId);
 
       this._catalogue.hide();
@@ -22,7 +38,6 @@ export default class PhonesPage {
 
       console.log(phoneId);
     });
-
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
@@ -31,30 +46,7 @@ export default class PhonesPage {
   _render() {
     this._element.innerHTML = `
       <!--Sidebar-->
-      <div class="col-md-2">
-        <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
-        </section>
-  
-        <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
-        </section>
+      <div class="col-md-2" data-component="sidebar">        
       </div>
   
       <!--Main content-->
