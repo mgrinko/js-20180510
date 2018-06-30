@@ -25,8 +25,10 @@ export default class PhoneCatalog extends Component {
         ${this._phones.map(phone => `
           
           <li class="thumbnail"
-              data-element="phone"
-              data-phone-id="${ phone.id }">
+            data-phone-name="${ phone.name }"
+            data-element="phone"
+            data-phone-id="${ phone.id }"
+            data-phone-age="${ phone.age }">
               
             <a href="#!/phones/${ phone.id }" class="thumb">
               <img

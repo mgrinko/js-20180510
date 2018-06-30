@@ -1,16 +1,21 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
+import Component from '../component.js';
 
-export default class PhonesPage {
+export default class PhonesPage extends Component {
   constructor({ element }) {
-    this._element = element;
+    super({ element });
 
     this._render();
 
-    this._catalogue = new PhoneCatalog({
-      element: this._element.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getPhones(),
+    this._sortControl = this._element.querySelector('#sort');
+    this._sortField = this._sortControl.value;
+
+    this._sort(this._sortField);
+
+    this.on('change', '#sort', (event) => {
+        this._sort(event.delegateTarget.value);
     });
 
     this._catalogue.on('phone-selected', (event) => {
@@ -19,12 +24,19 @@ export default class PhonesPage {
 
       this._catalogue.hide();
       this._viewer.showPhone(phoneDetails);
-
-      // console.log(phoneId);
     });
 
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+    });
+  }
+
+  _sort(field) {
+    this._catalogue = new PhoneCatalog({
+        element: this._element.querySelector('[data-component="phone-catalog"]'),
+        phones: PhoneService.getPhones({
+            sort: field
+        }),
     });
   }
 
@@ -40,9 +52,9 @@ export default class PhonesPage {
   
           <p>
             Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
+            <select id="sort">
+                <option value="name">Alphabetical</option>
+                <option value="age">Newest</option>
             </select>
           </p>
         </section>
