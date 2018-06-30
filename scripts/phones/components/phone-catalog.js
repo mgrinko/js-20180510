@@ -8,8 +8,8 @@ export default class PhoneCatalog extends Component {
 
     this._render();
 
-      this.on('click', '[data-element="phone"]', (event) => {
-      this._onPhoneClick(event);
+    this.on('click', '[data-element="phone"]', (event) => {
+        this._onPhoneClick(event);
     });
   }
 
@@ -20,7 +20,7 @@ export default class PhoneCatalog extends Component {
   }
 
   _render() {
-    this._element.innerHTML = `
+      this._element.innerHTML = `
       <ul class="phones">
         ${this._phones.map(phone => `
           

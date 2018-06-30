@@ -1,6 +1,6 @@
 import Component from '../../component.js';
 
-export default class Sidebar extends Component {
+export default class SidebarSearchForm extends Component {
 
     constructor({element}) {
         super({element});
@@ -9,11 +9,10 @@ export default class Sidebar extends Component {
     }
 
     _render() {
-        this._element.innerHTML = `
-      <section>
+        this._element.innerHTML = `     
           <p>
             Search:
-            <input>
+            <input class="search-form">
           </p>
   
           <p>
@@ -22,17 +21,7 @@ export default class Sidebar extends Component {
               <option value="name">Alphabetical</option>
               <option value="age" selected>Newest</option>
             </select>
-          </p>
-        </section>
-  
-        <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
-        </section>
+          </p>       
     `;
     }
 }

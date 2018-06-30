@@ -109,3 +109,13 @@ ul.specs dt {
 h1 {
   border-bottom: 1px solid gray;
 }
+
+.icon {
+  background: url("img/glyphicons-halflings.png") no-repeat;
+  width: 16px;
+  height: 16px;
+  float: right;
+  margin-top: 3px;
+  background-position: -310px 0px;
+}
+
