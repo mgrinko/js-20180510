@@ -9,7 +9,9 @@ export default class PhoneCatalog extends Component {
     this._render();
 
     this.on('click', '[data-element="phone"]', (event) => {
-      this._onPhoneClick(event);
+      if (event.target.classList.contains('js-detail')) {
+          this._onPhoneClick(event);
+      }
     });
   }
 
@@ -31,7 +33,7 @@ export default class PhoneCatalog extends Component {
             data-phone-age="${ phone.age }">
               
             <a href="#!/phones/${ phone.id }" class="thumb">
-              <img
+              <img class="js-detail"
                 alt="${ phone.name }"
                 src="${ phone.imageUrl }"
               >
@@ -43,7 +45,7 @@ export default class PhoneCatalog extends Component {
               </a>
             </div>
   
-            <a href="#!/phones/${ phone.id }">${ phone.name }</a>
+            <a href="#!/phones/${ phone.id }" class="js-detail">${ phone.name }</a>
             <p>${ phone.snippet }</p>
           </li>
         

@@ -262,7 +262,10 @@ const PhoneService = {
   },
 
   sortAsString(field1, field2) {
-    return (field1 > field2) - (field1 < field2);
+    const f1 = field1.toLowerCase();
+    const f2 = field2.toLowerCase();
+
+    return (f1 > f2) - (f1 < f2);
   },
 };
 
