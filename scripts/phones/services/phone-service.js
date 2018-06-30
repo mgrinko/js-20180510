@@ -225,8 +225,19 @@ const PhoneService = {
   },
 
   getPhone(phoneId) {
-    return phoneDetails;
-  },
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', `/js-20180510/phones/${ phoneId }.json`, false);
+    xhr.send();
+
+    if (xhr.status !== 200) {
+        console.log(xhr.status + ': ' + xhr.statusText);
+        return;
+    }
+
+    return JSON.parse(xhr.responseText);
+  }
+
 };
 
 export default PhoneService;

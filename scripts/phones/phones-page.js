@@ -20,7 +20,7 @@ export default class PhonesPage {
       this._catalogue.hide();
       this._viewer.showPhone(phoneDetails);
 
-      console.log(phoneId);
+      // console.log(phoneId);
     });
 
     this._viewer = new PhoneViewer({
