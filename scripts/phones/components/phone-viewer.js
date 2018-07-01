@@ -25,7 +25,10 @@ export default class PhoneViewer extends Component {
         .map(
           img => `
         <li>
-          <img src="${img}">
+          <img src="${img}" 
+            data-element="phone-thumbs" 
+            data-phone-thumbs-src="${img}"
+          >
         </li>`,
         )
         .join('')}
