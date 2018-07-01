@@ -1,56 +1,70 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones }) {
-    super({ element });
 
-    this._phones = phones;
+    constructor({ element, phones }) {
+        super({ element });
 
-    this._render();
+        this._phones = phones;
 
-    this.on('click', '[data-element="phone"]', (event) => {
-      if (event.target.classList.contains('js-detail')) {
-          this._onPhoneClick(event);
-      }
-    });
-  }
+        this._render();
+        this._addEvents();
+    }
 
-  _onPhoneClick(event) {
-    let phoneElement = event.delegateTarget;
+    _addEvents() {
+        this.on('click', '[data-element="phone"]', (event) => {
+            if (event.target.classList.contains('js-detail')) {
+                this._onPhoneClick(event);
+            }
+        });
 
-    this.trigger('phone-selected', phoneElement.dataset.phoneId);
-  }
+        this.on('click', '.phones__btn-buy', (event) => {
+            this._onPhoneBuyClick(event);
+        });
+    }
 
-  _render() {
-    this._element.innerHTML = `
-      <ul class="phones">
-        ${this._phones.map(phone => `
-          
-          <li class="thumbnail"
-            data-phone-name="${ phone.name }"
-            data-element="phone"
-            data-phone-id="${ phone.id }"
-            data-phone-age="${ phone.age }">
-              
-            <a href="#!/phones/${ phone.id }" class="thumb">
-              <img class="js-detail"
-                alt="${ phone.name }"
-                src="${ phone.imageUrl }"
-              >
-            </a>
-  
-            <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
-                Add
-              </a>
-            </div>
-  
-            <a href="#!/phones/${ phone.id }" class="js-detail">${ phone.name }</a>
-            <p>${ phone.snippet }</p>
-          </li>
-        
-        `).join('')}
-      </ul>
-    `;
-  }
+    _onPhoneBuyClick(event) {
+        const phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+        const phoneName = phoneElement.dataset.phoneName;
+
+        this.trigger('phone-add-to-cart', phoneName);
+    }
+
+    _onPhoneClick(event) {
+        let phoneElement = event.delegateTarget;
+
+        this.trigger('phone-selected', phoneElement.dataset.phoneId);
+    }
+
+    _render() {
+        this._element.innerHTML = `
+            <ul class="phones">
+            ${this._phones.map(phone => `
+
+                <li class="thumbnail""
+                    data-element="phone"
+                    data-phone-id="${ phone.id }"
+                    data-phone-name="${ phone.name }"
+                    data-phone-age="${ phone.age }">
+                  
+                    <a href="#!/phones/${ phone.id }" class="thumb">
+                        <img class="js-detail"
+                            alt="${ phone.name }"
+                            src="${ phone.imageUrl }"
+                        >
+                    </a>
+                
+                    <div class="phones__btn-buy-wrapper">
+                        <a class="btn btn-success phones__btn-buy">Add</a>
+                    </div>
+                
+                    <a href="#!/phones/${ phone.id }" class="js-detail js-filter-name">${ phone.name }</a>
+                    <p class="js-filter-description">${ phone.snippet }</p>
+                </li>
+            
+            `).join('')}
+            </ul>
+        `;
+    }
+
 }
