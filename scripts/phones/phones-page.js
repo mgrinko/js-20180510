@@ -74,6 +74,12 @@ export default class PhonesPage extends Component {
 
             this._cart.add(phoneName);
         });
+
+        // Back to catalogue from viewer
+        this._viewer.on('back-to-catalogue', () => {
+            this._viewer.hide();
+            this._catalogue.show();
+        });
     }
 
     _render() {

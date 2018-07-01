@@ -2,11 +2,15 @@ import Component from '../../component.js';
 
 export default class PhoneViewer extends Component {
 
+    constructor({ element }) {
+        super({ element });
+
+        this._addEvents();
+    }
+
     showPhone(phoneDetails) {
         this._render(phoneDetails);
         this.show();
-
-        this._addEvents();
     }
 
     _addEvents() {
@@ -17,6 +21,14 @@ export default class PhoneViewer extends Component {
         this.on('click', '.phone-viewer__add-to-cart', (event) => {
             this._onAddToCartClick(event);
         });
+
+        this.on('click', '.phone-viewer__back', () => {
+            this._onBackClick();
+        });
+    }
+
+    _onBackClick() {
+        this.trigger('back-to-catalogue', null);
     }
 
     _onAddToCartClick(event) {
@@ -36,7 +48,7 @@ export default class PhoneViewer extends Component {
         this._element.innerHTML = `
             <img class="phone" src="${ phone.images[0] }">
             
-            <button onclick="location.reload()">Back</button>
+            <button class="phone-viewer__back">Back</button>
             <button class="phone-viewer__add-to-cart" data-phone-name="${ phone.name }">Add to basket</button>
             
             <h1>${ phone.name }</h1>
