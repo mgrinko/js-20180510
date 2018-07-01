@@ -4,13 +4,16 @@ export default class PhoneCatalog extends Component {
   constructor({ element, phones }) {
     super({ element });
 
-    this._phones = phones;
-
-    this._render();
+    this.setPhoneList(phones);
 
     this.on('click', '[data-element="phone"]', (event) => {
       this._onPhoneClick(event);
     });
+  }
+
+  setPhoneList(phones) {
+    this._phones = phones;
+    this._render();
   }
 
   _onPhoneClick(event) {

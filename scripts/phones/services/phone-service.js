@@ -220,6 +220,16 @@ const phoneDetails = {
 };
 
 const PhoneService = {
+  search(query) {
+    let result = [];
+    for (let phone of phones) {
+      if (phone.name.toLowerCase().includes(query.toLowerCase())) {
+        result.push(phone);
+      }
+    }
+    return result;
+  },
+
   getPhones() {
     return phones;
   },

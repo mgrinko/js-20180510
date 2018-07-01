@@ -1,5 +1,6 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import PhoneMenu from './components/phone-menu.js';
 import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
@@ -26,36 +27,24 @@ export default class PhonesPage {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
+
+    this._menu = new PhoneMenu({
+      element: this._element.querySelector('[data-component="phone-menu"]'),
+    });
+
+    this._menu.on('search-initiated', (event) => {
+      let query = event.detail;
+      let searchResult = PhoneService.search(query);
+      this._viewer.hide();
+      this._catalogue.show();
+      this._catalogue.setPhoneList(searchResult);
+    });
   }
 
   _render() {
     this._element.innerHTML = `
       <!--Sidebar-->
-      <div class="col-md-2">
-        <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
-        </section>
-  
-        <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
-        </section>
-      </div>
+      <div class="col-md-2" data-component="phone-menu"></div>
   
       <!--Main content-->
       <div class="col-md-10">
