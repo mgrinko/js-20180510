@@ -6,11 +6,21 @@ export default class PhoneCatalog extends Component {
 
     this._phones = phones;
 
-    this._render();
-
     this.on('click', '[data-element="phone"]', (event) => {
       this._onPhoneClick(event);
     });
+
+    this._render();
+  }
+
+  updatePhones(phones) {
+    this._phones = phones;
+    this._render();
+  }
+
+  sortPhones(sortType) {
+    this._phones = this._phones.sort((a, b) => a[sortType] > b[sortType] ? 1 : -1);
+    this._render();
   }
 
   _onPhoneClick(event) {
@@ -26,12 +36,12 @@ export default class PhoneCatalog extends Component {
           
           <li class="thumbnail"
               data-element="phone"
-              data-phone-id="${ phone.id }">
+              data-phone-id="${ phone.id}">
               
-            <a href="#!/phones/${ phone.id }" class="thumb">
+            <a href="#!/phones/${ phone.id}" class="thumb">
               <img
-                alt="${ phone.name }"
-                src="${ phone.imageUrl }"
+                alt="${ phone.name}"
+                src="${ phone.imageUrl}"
               >
             </a>
   
@@ -41,8 +51,8 @@ export default class PhoneCatalog extends Component {
               </a>
             </div>
   
-            <a href="#!/phones/${ phone.id }">${ phone.name }</a>
-            <p>${ phone.snippet }</p>
+            <a href="#!/phones/${ phone.id}">${phone.name}</a>
+            <p>${ phone.snippet}</p>
           </li>
         
         `).join('')}
