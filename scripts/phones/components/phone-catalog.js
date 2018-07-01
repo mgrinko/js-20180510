@@ -15,7 +15,6 @@ export default class PhoneCatalog extends Component {
 
   _onPhoneClick(event) {
     let phoneElement = event.delegateTarget;
-
     this.trigger('phone-selected', phoneElement.dataset.phoneId);
   }
 
@@ -26,23 +25,24 @@ export default class PhoneCatalog extends Component {
           
           <li class="thumbnail"
               data-element="phone"
-              data-phone-id="${ phone.id }">
+              data-phone-id="${ phone.id }"> 
               
+                           
             <a href="#!/phones/${ phone.id }" class="thumb">
               <img
                 alt="${ phone.name }"
                 src="${ phone.imageUrl }"
               >
-            </a>
-  
-            <div class="phones__btn-buy-wrapper">
+            </a>  
+            <div class="phones__btn-buy-wrapper" data-phone-name="${ phone.name }">
               <a class="btn btn-success">
                 Add
               </a>
-            </div>
-  
+            </div>  
             <a href="#!/phones/${ phone.id }">${ phone.name }</a>
             <p>${ phone.snippet }</p>
+            
+            
           </li>
         
         `).join('')}

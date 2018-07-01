@@ -8,15 +8,15 @@ export default class PhoneViewer extends Component {
         this.on('click', '.phone-thumbnail', (event) => {
             this._currentImage = this._element.querySelector('.phone');
             this._currentImage.setAttribute('src', event.delegateTarget.dataset.image)
-        })
+        });
     }
 
     _render(phone) {
         this._element.innerHTML = `
       <img class="phone" src="${phone.images[0]}">
       
-      <button onclick="document.location.reload()">Back</button>
-      <button>Add to basket</button>    
+      <button class="back">Back</button>
+      <button class="order" data-phone-name="${phone.name}">Add to basket</button>    
       
       <h1>${phone.name}</h1>  
       <p>${phone.description}</p>  
