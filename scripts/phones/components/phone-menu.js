@@ -5,8 +5,12 @@ export default class PhoneMenu extends Component {
     super({ element });
     this._render();
 
-    this.on('keyup', '[data-element="search"]', (event) => {
+    this.on('keyup', '[data-element="phone-search"]', (event) => {
       this._onSearch(event);
+    });
+
+    this.on('change', '[data-element="phone-sort"]', (event) => {
+      this._onSort(event);
     });
   }
 
@@ -19,18 +23,23 @@ export default class PhoneMenu extends Component {
     this.trigger('search-initiated', searchInput.value);
   }
 
+  _onSort(event) {
+      let sortInput = event.delegateTarget;
+      this.trigger('sort-initiated', sortInput[sortInput.selectedIndex].value);
+  }
+
   _render() {
     this._element.innerHTML = `
 
         <section>
           <p>
             Search:
-            <input data-element="search">
+            <input data-element="phone-search">
           </p>
   
           <p>
             Sort by:
-            <select>
+            <select data-element="phone-sort">
               <option value="name">Alphabetical</option>
               <option value="age">Newest</option>
             </select>

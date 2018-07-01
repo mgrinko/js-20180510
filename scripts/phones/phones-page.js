@@ -39,6 +39,14 @@ export default class PhonesPage {
       this._catalogue.show();
       this._catalogue.setPhoneList(searchResult);
     });
+
+    this._menu.on('sort-initiated', (event) => {
+      let sortBy = event.detail;
+      let sortResult = PhoneService.sort(sortBy);
+      this._viewer.hide();
+      this._catalogue.show();
+      this._catalogue.setPhoneList(sortResult);
+    });
   }
 
   _render() {

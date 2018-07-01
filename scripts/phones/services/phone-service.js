@@ -230,6 +230,21 @@ const PhoneService = {
     return result;
   },
 
+  sort(attribute) {
+    return phones.sort((a, b) => {
+      if (typeof a[attribute] === 'string') {
+        return a[attribute].localeCompare(b[attribute]);
+      }
+      if (a[attribute] > b[attribute]) {
+        return 1;
+      }
+      if (a[attribute] < b[attribute]) {
+        return -1;
+      }
+      return 0;
+    });
+  },
+
   getPhones() {
     return phones;
   },
