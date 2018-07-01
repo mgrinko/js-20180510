@@ -9,6 +9,10 @@ export default class PhoneCatalog extends Component {
     this.on('click', '[data-element="phone"]', (event) => {
       this._onPhoneClick(event);
     });
+
+    this.on('click', '[data-element="phone-add"]', (event) => {
+      this._onAddClick(event);
+    });
   }
 
   setPhoneList(phones) {
@@ -17,9 +21,16 @@ export default class PhoneCatalog extends Component {
   }
 
   _onPhoneClick(event) {
+    if (event.target.dataset.element === 'phone-add') {
+      return;
+    }
     let phoneElement = event.delegateTarget;
-
     this.trigger('phone-selected', phoneElement.dataset.phoneId);
+  }
+
+  _onAddClick(event) {
+    let phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+    this.trigger('phone-added', phoneElement.dataset.phoneName);
   }
 
   _render() {
@@ -29,7 +40,8 @@ export default class PhoneCatalog extends Component {
           
           <li class="thumbnail"
               data-element="phone"
-              data-phone-id="${ phone.id }">
+              data-phone-id="${ phone.id }"
+              data-phone-name="${ phone.name }">
               
             <a href="#!/phones/${ phone.id }" class="thumb">
               <img
@@ -39,7 +51,7 @@ export default class PhoneCatalog extends Component {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a class="btn btn-success" data-element="phone-add">
                 Add
               </a>
             </div>

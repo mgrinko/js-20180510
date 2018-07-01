@@ -12,6 +12,15 @@ export default class PhoneMenu extends Component {
     this.on('change', '[data-element="phone-sort"]', (event) => {
       this._onSort(event);
     });
+
+    this.on('click', '[data-element="delete-item"]', (event) => {
+      this._onDeleteFromCart(event);
+    });
+  }
+
+  addToCart(item) {
+    let cart = this._element.querySelector('[data-element="cart-content"]');
+    cart.insertAdjacentHTML("beforeend", `<li>${ item } <a data-element="delete-item">[x]</a></li>`)
   }
 
   _onSearch(event) {
@@ -26,6 +35,11 @@ export default class PhoneMenu extends Component {
   _onSort(event) {
       let sortInput = event.delegateTarget;
       this.trigger('sort-initiated', sortInput[sortInput.selectedIndex].value);
+  }
+
+  _onDeleteFromCart(event) {
+    let item = event.delegateTarget.closest('li');
+    item.remove();
   }
 
   _render() {
@@ -48,10 +62,10 @@ export default class PhoneMenu extends Component {
   
         <section>
           <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
+          <ul data-element="cart-content">
+            <li>Phone 1 <a data-element="delete-item">[x]</a></li>
+            <li>Phone 2 <a data-element="delete-item">[x]</a></li>
+            <li>Phone 3 <a data-element="delete-item">[x]</a></li>
           </ul>
         </section>
         
