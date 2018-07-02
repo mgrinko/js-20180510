@@ -1,48 +1,52 @@
 import Component from '../../component.js';
 
 export default class PhoneBasket extends Component {
-  constructor({ element, listPhones }) {
+  constructor({ element }) {
     super({ element });
-    this._listPhone = listPhones;
+    this._listPhones = [];
 
-    this.onAddToBasket = this.onAddToBasket.bind(this);
-
-    if (this._listPhone) {
+    if (this._listPhones) {
       this._render();
     }
+
+    //Удаление телефонов
+    this.on('click', '[data-element="basket-remove-item"]', event => {
+      this.onRemovePhone(event.delegateTarget.dataset.phoneItem);
+    });
   }
 
   //добавление в корзину
   onAddToBasket(phoneToBasket) {
-    // переменная ндля проверки телефона в корзине
-    const isEmpty = this._listPhone.forEach(el => {
+    // переменная для проверки телефона в корзине
+    const isEmpty = this._listPhones.includes(el => {
       if (el.name === phoneToBasket) {
         return true;
       }
     });
-
     // если телефона нет в корзине, то добалвяем
     if (!isEmpty) {
-      this._listPhone.push({ name: phoneToBasket });
+      this._listPhones.push({ name: phoneToBasket });
       this._render();
     }
   }
 
   // удаление из корзины
   onRemovePhone(phoneIndex) {
-    this._listPhone.splice(phoneIndex, 1);
+    this._listPhones.splice(phoneIndex, 1);
     this._render();
   }
 
   _render() {
     this._element.innerHTML = `<p>Shopping Cart</p>
         <ul>
-          ${this._listPhone
+          ${this._listPhones
             .map(
               (phone, index) => `
             <li>
               <div >${phone.name}</div> 
-              <div class="basket-remove-item" data-phone-item="${index}">[X]</div>
+              <div class="basket-remove-item" 
+              data-element="basket-remove-item"
+              data-phone-item="${index}">[X]</div>
             </li>
             
             `,

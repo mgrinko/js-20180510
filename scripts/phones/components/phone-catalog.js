@@ -1,25 +1,27 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones, addToBasket }) {
+  constructor({ element, phones }) {
     super({ element });
     this._phones = phones;
-    this._addToBasket = addToBasket;
     this._render();
 
-    this.on('click', '[data-element="phone"]', event => {
-      this._onPhoneClick(event);
+    this.on('click', '[data-element="details-link"]', event => {
+      let phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+
+      this.trigger('phone-selected', phoneElement.dataset.phoneId);
+    });
+
+    this.on('click', '[data-element="add-to-basket"]', event => {
+      let phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+
+      this.trigger('add', phoneElement.dataset.phoneId);
     });
   }
 
-  _onPhoneClick(event) {
-    let phoneElement = event.delegateTarget;
-    if (event.target.dataset.element === 'add-to-basket') {
-      console.log(phoneElement.dataset.phoneId);
-      this._addToBasket(phoneElement.dataset.phoneId);
-    } else {
-      this.trigger('phone-selected', phoneElement.dataset.phoneId);
-    }
+  showPhones(phones) {
+    this._phones = phones;
+    this._render();
   }
 
   _render() {
@@ -33,7 +35,7 @@ export default class PhoneCatalog extends Component {
               data-element="phone"
               data-phone-id="${phone.id}">
               
-            <a href="#!/phones/${phone.id}" class="thumb">
+            <a href="#!/phones/${phone.id}" class="thumb" data-element="details-link">
               <img
                 alt="${phone.name}"
                 src="${phone.imageUrl}"
@@ -46,7 +48,7 @@ export default class PhoneCatalog extends Component {
               </a>
             </div>
   
-            <a href="#!/phones/${phone.id}">${phone.name}</a>
+            <a href="#!/phones/${phone.id}" data-element="details-link">${phone.name}</a>
             <p>${phone.snippet}</p>
           </li>
         

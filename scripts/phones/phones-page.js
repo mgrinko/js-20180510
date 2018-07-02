@@ -1,7 +1,6 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
-import PhoneSort from './components/phone-sort.js';
-import PhoneSearch from './components/phone-search.js';
+import PhoneFilters from './components/phone-filters.js';
 import PhoneBasket from './components/phone-basket.js';
 import PhoneService from './services/phone-service.js';
 import Component from '../component.js';
@@ -10,66 +9,19 @@ export default class PhonesPage extends Component {
   constructor({ element }) {
     super({ element });
     this._element = element;
-    this.listPhones = [];
+
     this._render();
 
-    this._search = new PhoneSearch({
-      element: this._element.querySelector('[data-component="phone-search"]'),
-    });
+    this._initCatalog();
+    this._initViewer();
+    this._initFilters();
+    this._initBasket();
+  }
 
-    this._search.on(
-      'input',
-      '.input-search',
-      this.throttle(event => {
-        const serchValue = event.target.value;
-        let searchPhone = [];
-        if (serchValue) {
-          searchPhone = PhoneService.getPhones().filter(el => {
-            return el.name.toUpperCase().indexOf(serchValue.toUpperCase()) > 0;
-          });
-        }
-        this._catalogue = new PhoneCatalog({
-          element: this._element.querySelector('[data-component="phone-catalog"]'),
-          phones: searchPhone.length > 0 ? searchPhone : PhoneService.getPhones(),
-          addToBasket: this._basket.onAddToBasket,
-        });
-      }, 1100),
-    );
-
-    this._sort = new PhoneSort({
-      element: this._element.querySelector('[data-component="phone-sort"]'),
-    });
-
-    this._basket = new PhoneBasket({
-      element: this._element.querySelector('[data-component="phone-basket"]'),
-      listPhones: this.listPhones,
-    });
-
-    //Удаление телефонов
-    this._basket.on('click', '.basket-remove-item', event => {
-      this._basket.onRemovePhone(event.delegateTarget.dataset.phoneItem);
-    });
-
-    this._sort.on('sort-selected', event => {
-      let sortBy = event.detail;
-
-      let allPhone = PhoneService.getPhones().sort((a, b) => {
-        if (a[sortBy] > b[sortBy]) return 1;
-        if (a[sortBy] < b[sortBy]) return -1;
-      });
-
-      this._catalogue = new PhoneCatalog({
-        element: this._element.querySelector('[data-component="phone-catalog"]'),
-        phones: allPhone,
-        addToBasket: this._basket.onAddToBasket,
-      });
-      console.log(`выбранная сортировка:${sortBy}`);
-    });
-
+  _initCatalog() {
     this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
-      addToBasket: this._basket.onAddToBasket,
     });
 
     this._catalogue.on('phone-selected', event => {
@@ -78,12 +30,52 @@ export default class PhonesPage extends Component {
 
       this._catalogue.hide();
       this._viewer.showPhone(phoneDetails);
-
-      console.log(phoneId);
     });
 
+    this._catalogue.on('add', event => {
+      let phoneId = event.detail;
+
+      this._basket.onAddToBasket(phoneId);
+    });
+  }
+
+  _initViewer() {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+    });
+
+    this._viewer.on('back', () => {
+      this._catalogue.show();
+      this._viewer.hide();
+    });
+
+    this._viewer.on('add', event => {
+      let phoneId = event.detail;
+      this._basket.onAddToBasket(phoneId);
+    });
+  }
+
+  _initFilters() {
+    this._filters = new PhoneFilters({
+      element: this._element.querySelector('[data-component="phone-filters"]'),
+    });
+
+    this._filters.on('sort', event => {
+      let sortedPhones = PhoneService.getPhones({ order: event.detail });
+
+      this._catalogue.showPhones(sortedPhones);
+    });
+
+    this._filters.on('search', event => {
+      let sortedPhones = PhoneService.getPhones({ query: event.detail });
+
+      this._catalogue.showPhones(sortedPhones);
+    });
+  }
+
+  _initBasket() {
+    this._basket = new PhoneBasket({
+      element: this._element.querySelector('[data-component="phone-basket"]'),
     });
   }
 
@@ -91,11 +83,8 @@ export default class PhonesPage extends Component {
     this._element.innerHTML = `
       <!--Sidebar-->
       <div class="col-md-2">
-        <section>
-          <div class="sidebar-elements" data-component="phone-search" />
-        </section>
-        <section>
-          <div class="sidebar-elements" data-component="phone-sort" />
+        <section >
+          <div class="sidebar-elements" data-component="phone-filters" />
         </section>
         
         <section>
