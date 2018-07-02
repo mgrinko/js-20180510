@@ -9,13 +9,20 @@ export default class PhoneFilters extends Component {
     window.handlePhonesSort = (event) => {
       this.trigger('sort', event.target.value);
     };
+
+    window.handlePhonesSearch = (event) => {
+      this.trigger('search', event.target.value);
+    };
   }
 
   _render() {
     this._element.innerHTML = `
       <p>
         Search:
-        <input type="text">
+        <input
+          oninput="window.handlePhonesSearch(event)"
+          type="text"
+        >
       </p>
 
       <p>

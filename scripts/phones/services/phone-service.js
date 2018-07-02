@@ -220,12 +220,24 @@ const phoneDetails = {
 };
 
 const PhoneService = {
-  getPhones({ order } = {}) {
-    if (!order) {
-      return phones;
+  getPhones({ order, query } = {}) {
+    let filteredPhones = phones;
+
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+
+      filteredPhones = filteredPhones.filter(phone => {
+        return phone.name.toLowerCase().includes(lowerQuery);
+      });
     }
 
-    return phones.sort((a, b) => a[order] > b[order] ? 1 : -1);
+    if (order) {
+      filteredPhones = filteredPhones.sort((a, b) => {
+        return a[order] > b[order] ? 1 : -1
+      });
+    }
+
+    return filteredPhones;
   },
 
   getPhone(phoneId) {

@@ -68,7 +68,9 @@ export default class PhonesPage {
     });
 
     this._filters.on('search', (event) => {
-      console.log(data);
+      let sortedPhones = PhoneService.getPhones({ query: event.detail });
+
+      this._catalogue.showPhones(sortedPhones);
     });
   }
 
