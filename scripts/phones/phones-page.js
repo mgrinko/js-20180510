@@ -48,6 +48,12 @@ export default class PhonesPage {
       this._catalogue.show();
       this._viewer.hide();
     });
+
+    this._viewer.on('add', (event) => {
+      let phoneId = event.detail;
+
+      this._shoppingCart.addItem(phoneId);
+    });
   }
 
   _initFilters() {
@@ -55,7 +61,13 @@ export default class PhonesPage {
       element: this._element.querySelector('[data-component="phone-filters"]'),
     });
 
-    this._filters.on('search', (data) => {
+    this._filters.on('sort', (event) => {
+      let sortedPhones = PhoneService.getPhones({ order: event.detail });
+
+      this._catalogue.showPhones(sortedPhones);
+    });
+
+    this._filters.on('search', (event) => {
       console.log(data);
     });
   }

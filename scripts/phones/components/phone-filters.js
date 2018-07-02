@@ -5,6 +5,10 @@ export default class PhoneFilters extends Component {
     super({ element });
 
     this._render();
+
+    window.handlePhonesSort = (event) => {
+      this.trigger('sort', event.target.value);
+    };
   }
 
   _render() {
@@ -16,7 +20,7 @@ export default class PhoneFilters extends Component {
 
       <p>
         Sort by:
-        <select>
+        <select onchange="window.handlePhonesSort(event)">
           <option value="name">Alphabetical</option>
           <option value="age">Newest</option>
         </select>

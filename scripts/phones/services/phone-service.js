@@ -220,8 +220,12 @@ const phoneDetails = {
 };
 
 const PhoneService = {
-  getPhones() {
-    return phones;
+  getPhones({ order } = {}) {
+    if (!order) {
+      return phones;
+    }
+
+    return phones.sort((a, b) => a[order] > b[order] ? 1 : -1);
   },
 
   getPhone(phoneId) {
