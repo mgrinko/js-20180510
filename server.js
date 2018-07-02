@@ -11,19 +11,14 @@ var file = new static.Server('.', {
 
 
 function accept(req, res) {
-  file.serve(req, res);
+  if (req.url.startsWith('/api')) {
+    setTimeout(() => {
+      file.serve(req, res);
+    }, 500);
+  } else {
+    file.serve(req, res);
+  }
 }
-
-
-// function accept(req, res) {
-//   if (req.url.startsWith('/api')) {
-//     setTimeout(() => {
-//       file.serve(req, res);
-//     }, 1000);
-//   } else {
-//     file.serve(req, res);
-//   }
-// }
 
 http.createServer(accept).listen(3000);
 

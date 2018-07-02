@@ -1,38 +1,63 @@
 
 const PhoneService = {
-  getPhones({ order, query } = {}) {
+  getPhones({ order, query, successCallback } = {}) {
 
-    let xhr = new XMLHttpRequest();
+    this._sendRequest('/api/phones.json', {
+      onSuccess: (phones) => {
+        let filteredPhones = phones;
 
-    xhr.open('GET', '/phones/phones.json', false);
-    xhr.send();
+        if (query) {
+          const lowerQuery = query.toLowerCase();
 
-    let filteredPhones = JSON.parse(xhr.responseText);
+          filteredPhones = filteredPhones.filter(phone => {
+            return phone.name.toLowerCase().includes(lowerQuery);
+          });
+        }
 
-    if (query) {
-      const lowerQuery = query.toLowerCase();
+        if (order) {
+          filteredPhones = filteredPhones.sort((a, b) => {
+            return a[order] > b[order] ? 1 : -1
+          });
+        }
 
-      filteredPhones = filteredPhones.filter(phone => {
-        return phone.name.toLowerCase().includes(lowerQuery);
-      });
-    }
+        successCallback(filteredPhones);
+      }
+    });
 
-    if (order) {
-      filteredPhones = filteredPhones.sort((a, b) => {
-        return a[order] > b[order] ? 1 : -1
-      });
-    }
-
-    return filteredPhones;
   },
 
-  getPhone(phoneId) {
+  getPhone(phoneId, successCallback) {
+    this._sendRequest(`/api/phones/${phoneId}.json`, {
+      onSuccess: successCallback,
+    })
+  },
+
+  _sendRequest(url, {
+    method = 'GET',
+    onSuccess = () => {},
+    onError = (error) => {
+      console.error(error);
+    },
+  }) {
     let xhr = new XMLHttpRequest();
 
-    xhr.open('GET', `/phones/${phoneId}.json`, false);
+    xhr.open(method, url, true);
     xhr.send();
 
-    return JSON.parse(xhr.responseText);
+    xhr.onload = ()=> {
+      if (xhr.status !== 200) {
+        onError(xhr.status + xhr.statusText);
+
+        return;
+      }
+
+      let data = JSON.parse(xhr.responseText);
+      onSuccess(data);
+    };
+
+    xhr.onerror = () => {
+      onError(xhr.status + xhr.statusText);
+    };
   },
 };
 
