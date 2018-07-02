@@ -22,6 +22,10 @@ body {
   padding: 0.5rem 0;
 }
 
+.basket-remove-item:hover {
+  cursor: pointer;
+  font-weight: bolder;
+}
 .phones {
   list-style: none;
 }

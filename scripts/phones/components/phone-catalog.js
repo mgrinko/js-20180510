@@ -1,11 +1,10 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones }) {
+  constructor({ element, phones, addToBasket }) {
     super({ element });
-
     this._phones = phones;
-
+    this._addToBasket = addToBasket;
     this._render();
 
     this.on('click', '[data-element="phone"]', event => {
@@ -17,6 +16,7 @@ export default class PhoneCatalog extends Component {
     let phoneElement = event.delegateTarget;
     if (event.target.dataset.element === 'add-to-basket') {
       console.log(phoneElement.dataset.phoneId);
+      this._addToBasket(phoneElement.dataset.phoneId);
     } else {
       this.trigger('phone-selected', phoneElement.dataset.phoneId);
     }
