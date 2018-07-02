@@ -1,14 +1,40 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneSort from './components/phone-sort.js';
+import PhoneSearch from './components/phone-search.js';
 import PhoneBasket from './components/phone-basket.js';
 import PhoneService from './services/phone-service.js';
+import Component from '../component.js';
 
-export default class PhonesPage {
+export default class PhonesPage extends Component {
   constructor({ element }) {
+    super({ element });
     this._element = element;
     this.listPhones = [];
     this._render();
+
+    this._search = new PhoneSearch({
+      element: this._element.querySelector('[data-component="phone-search"]'),
+    });
+
+    this._search.on(
+      'input',
+      '.input-search',
+      this.throttle(event => {
+        const serchValue = event.target.value;
+        let searchPhone = [];
+        if (serchValue) {
+          searchPhone = PhoneService.getPhones().filter(el => {
+            return el.name.toUpperCase().indexOf(serchValue.toUpperCase()) > 0;
+          });
+        }
+        this._catalogue = new PhoneCatalog({
+          element: this._element.querySelector('[data-component="phone-catalog"]'),
+          phones: searchPhone.length > 0 ? searchPhone : PhoneService.getPhones(),
+          addToBasket: this._basket.onAddToBasket,
+        });
+      }, 1100),
+    );
 
     this._sort = new PhoneSort({
       element: this._element.querySelector('[data-component="phone-sort"]'),
@@ -35,6 +61,7 @@ export default class PhonesPage {
       this._catalogue = new PhoneCatalog({
         element: this._element.querySelector('[data-component="phone-catalog"]'),
         phones: allPhone,
+        addToBasket: this._basket.onAddToBasket,
       });
       console.log(`выбранная сортировка:${sortBy}`);
     });
@@ -65,17 +92,14 @@ export default class PhonesPage {
       <!--Sidebar-->
       <div class="col-md-2">
         <section>
-          <div class="sidebar-elements">
-            Search:
-            <input data-element="">
-          </div>
-  
+          <div class="sidebar-elements" data-component="phone-search" />
+        </section>
+        <section>
           <div class="sidebar-elements" data-component="phone-sort" />
         </section>
-  
+        
         <section>
           <div class="sidebar-elements" data-component="phone-basket" />
-          
         </section>
       </div>
   

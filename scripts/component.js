@@ -18,7 +18,7 @@ export default class Component {
       return;
     }
 
-    this._element.addEventListener(eventName, (event) => {
+    this._element.addEventListener(eventName, event => {
       let delegateTarget = event.target.closest(selector);
 
       if (!delegateTarget || !this._element.contains(delegateTarget)) {
@@ -35,5 +35,33 @@ export default class Component {
     let event = new CustomEvent(eventName, { detail });
 
     this._element.dispatchEvent(event);
+  }
+
+  throttle(func, ms) {
+    let isThrottled = false,
+      savedArgs,
+      savedThis;
+
+    function wrapper() {
+      if (isThrottled) {
+        savedArgs = arguments;
+        savedThis = this;
+        return;
+      }
+
+      func.apply(this, arguments);
+
+      isThrottled = true;
+
+      setTimeout(function() {
+        isThrottled = false;
+        if (savedArgs) {
+          wrapper.apply(savedThis, savedArgs);
+          savedArgs = savedThis = null;
+        }
+      }, ms);
+    }
+
+    return wrapper;
   }
 }

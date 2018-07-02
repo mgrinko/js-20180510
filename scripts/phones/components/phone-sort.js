@@ -3,7 +3,7 @@ import Component from '../../component.js';
 export default class PhoneSort extends Component {
   constructor({ element }) {
     super({ element });
-
+    this._element = element;
     this._render();
 
     this.on('change', '[data-element="phone-sort"]', event => {
