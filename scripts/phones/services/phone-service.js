@@ -1,8 +1,9 @@
+import HttpService from '../../common/services/http-service.js';
 
 const PhoneService = {
   getPhones({ order, query, successCallback } = {}) {
 
-    this._sendRequest('/api/phones.json', {
+    HttpService.sendRequest('/phones', {
       onSuccess: (phones) => {
         let filteredPhones = phones;
 
@@ -27,37 +28,9 @@ const PhoneService = {
   },
 
   getPhone(phoneId, successCallback) {
-    this._sendRequest(`/api/phones/${phoneId}.json`, {
+    HttpService.sendRequest(`/phones/${phoneId}`, {
       onSuccess: successCallback,
     })
-  },
-
-  _sendRequest(url, {
-    method = 'GET',
-    onSuccess = () => {},
-    onError = (error) => {
-      console.error(error);
-    },
-  }) {
-    let xhr = new XMLHttpRequest();
-
-    xhr.open(method, url, true);
-    xhr.send();
-
-    xhr.onload = ()=> {
-      if (xhr.status !== 200) {
-        onError(xhr.status + xhr.statusText);
-
-        return;
-      }
-
-      let data = JSON.parse(xhr.responseText);
-      onSuccess(data);
-    };
-
-    xhr.onerror = () => {
-      onError(xhr.status + xhr.statusText);
-    };
   },
 };
 
