@@ -1,6 +1,6 @@
-export default class PhoneSort {
+const PhoneSort = {
 
-    static sort(options) {
+    sort(options) {
         const elems = options.element.querySelectorAll('.phones > li');
         let field = '';
 
@@ -21,28 +21,31 @@ export default class PhoneSort {
                 let field2 = b.dataset[field];
 
                 if (field === 'phoneAge') {
-                    return PhoneSort._sortAsNumber(field1, field2);
+                    return PhoneSort.sortAsNumber(field1, field2);
                 }
 
                 if (field === 'phoneName') {
-                    return PhoneSort._sortAsString(field1, field2);
+                    return PhoneSort.sortAsString(field1, field2);
                 }
-            }).reduce( (prev, elem) => {
+            })
+            .reduce( (prev, elem) => {
                 return prev += elem.outerHTML;
             }, '');
 
         options.element.querySelector('.phones').innerHTML = sorted;
-    }
+    },
 
-    static _sortAsNumber(field1, field2) {
+    sortAsNumber(field1, field2) {
         return field1 - field2;
-    }
+    },
 
-    static _sortAsString(field1, field2) {
+    sortAsString(field1, field2) {
         const f1 = field1.toLowerCase();
         const f2 = field2.toLowerCase();
 
         return (f1 > f2) - (f1 < f2);
     }
 
-}
+};
+
+export default PhoneSort;

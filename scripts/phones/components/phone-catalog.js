@@ -13,7 +13,7 @@ export default class PhoneCatalog extends Component {
 
     _addEvents() {
         this.on('click', '[data-element="phone"]', (event) => {
-            if (event.target.classList.contains('js-detail')) {
+            if (event.target.closest('[data-element="details-link"]')) {
                 this._onPhoneClick(event);
             }
         });
@@ -48,7 +48,7 @@ export default class PhoneCatalog extends Component {
                     data-phone-age="${ phone.age }">
                   
                     <a href="#!/phones/${ phone.id }" class="thumb">
-                        <img class="js-detail"
+                        <img data-element="details-link"
                             alt="${ phone.name }"
                             src="${ phone.imageUrl }"
                         >
@@ -58,7 +58,10 @@ export default class PhoneCatalog extends Component {
                         <a class="btn btn-success phones__btn-buy">Add</a>
                     </div>
                 
-                    <a href="#!/phones/${ phone.id }" class="js-detail js-filter-name">${ phone.name }</a>
+                    <a href="#!/phones/${ phone.id }"
+                       class="js-filter-name"
+                       data-element="details-link">${ phone.name }
+                    </a>
                     <p class="js-filter-description">${ phone.snippet }</p>
                 </li>
             

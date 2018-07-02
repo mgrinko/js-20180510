@@ -2,7 +2,7 @@ import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
 import ShoppingCart from './components/shopping-cart.js';
-import PhoneSort from './components/phone-sort.js';
+import PhoneSort from './services/phone-sort.js';
 import PhoneSearch from './components/phone-search.js';
 import Component from '../component.js';
 
