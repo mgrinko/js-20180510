@@ -1,6 +1,7 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
+import serviceOptions from './components/service-options.js';
 
 export default class PhonesPage {
   constructor({ element }) {
@@ -26,35 +27,15 @@ export default class PhonesPage {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
+    this.on('change', '[data-sort-by]', (event) => {
+      this._sortPhones(event);
+    });
   }
 
   _render() {
     this._element.innerHTML = `
       <!--Sidebar-->
-      <div class="col-md-2">
-        <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
-        </section>
-  
-        <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
-        </section>
+      <div class="col-md-2" data-component="service-options">      
       </div>
   
       <!--Main content-->
@@ -63,5 +44,9 @@ export default class PhonesPage {
         <div data-component="phone-viewer" class="js-hidden"></div>
       </div>
     `;
+  }
+  _sortPhones(event){
+    console.log(event.currentTarget.value);
+
   }
 }

@@ -16,7 +16,7 @@ export default class PhoneCatalog extends Component {
   _onPhoneClick(event) {
     let phoneElement = event.delegateTarget;
 
-    this.trigger('phone-selected', phoneElement.dataset.phoneId);
+    this.generateEvent('phone-selected', phoneElement.dataset.phoneId);
   }
 
   _render() {

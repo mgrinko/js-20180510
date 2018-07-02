@@ -31,7 +31,7 @@ export default class Component {
     });
   }
 
-  trigger(eventName, detail) {
+  generateEvent(eventName, detail) {
     let event = new CustomEvent(eventName, { detail });
 
     this._element.dispatchEvent(event);
