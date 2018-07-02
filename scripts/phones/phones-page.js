@@ -13,6 +13,10 @@ export default class PhonesPage {
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
     });
+    this._serviceOptions = new serviceOptions({
+      element: this._element.querySelector('[data-component="service-options"]'),
+      //phones: PhoneService.getPhones(),
+    });
 
     this._catalogue.on('phone-selected', (event) => {
       let phoneId = event.detail;
@@ -27,9 +31,7 @@ export default class PhonesPage {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
-    this.on('change', '[data-sort-by]', (event) => {
-      this._sortPhones(event);
-    });
+
   }
 
   _render() {
@@ -45,8 +47,5 @@ export default class PhonesPage {
       </div>
     `;
   }
-  _sortPhones(event){
-    console.log(event.currentTarget.value);
 
-  }
 }
