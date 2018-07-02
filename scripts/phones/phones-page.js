@@ -1,5 +1,6 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import PhoneSort from './components/phone-sort.js';
 import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
@@ -13,7 +14,7 @@ export default class PhonesPage {
       phones: PhoneService.getPhones(),
     });
 
-    this._catalogue.on('phone-selected', (event) => {
+    this._catalogue.on('phone-selected', event => {
       let phoneId = event.detail;
       let phoneDetails = PhoneService.getPhone(phoneId);
 
@@ -26,6 +27,24 @@ export default class PhonesPage {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
+
+    this._sort = new PhoneSort({
+      element: this._element.querySelector('[data-component="phone-sort"]'),
+    });
+
+    this._sort.on('sort-selected', event => {
+      let sortBy = event.detail;
+
+      let allPhone = PhoneService.getPhones().sort((a, b) => {
+        if (a[sortBy] > b[sortBy]) return 1;
+        if (a[sortBy] < b[sortBy]) return -1;
+      });
+      this._catalogue = new PhoneCatalog({
+        element: this._element.querySelector('[data-component="phone-catalog"]'),
+        phones: allPhone,
+      });
+      console.log(`выбранная сортировка:${sortBy}`);
+    });
   }
 
   _render() {
@@ -33,18 +52,12 @@ export default class PhonesPage {
       <!--Sidebar-->
       <div class="col-md-2">
         <section>
-          <p>
+          <div class="sidebar-elements">
             Search:
             <input>
-          </p>
+          </div>
   
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
+          <div class="sidebar-elements" data-component="phone-sort" />
         </section>
   
         <section>
