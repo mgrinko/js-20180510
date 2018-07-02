@@ -1,7 +1,7 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
-import serviceOptions from './components/service-options.js';
+import ServiceOptions from './components/service-options.js';
 
 export default class PhonesPage {
   constructor({ element }) {
@@ -13,9 +13,9 @@ export default class PhonesPage {
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
     });
-    this._serviceOptions = new serviceOptions({
+    this._serviceOptions = new ServiceOptions({
       element: this._element.querySelector('[data-component="service-options"]'),
-      //phones: PhoneService.getPhones(),
+      //shoppingCart: this.getShoppingCart()
     });
 
     this._catalogue.on('phone-selected', (event) => {
@@ -26,6 +26,17 @@ export default class PhonesPage {
       this._viewer.showPhone(phoneDetails);
 
       console.log(phoneId);
+    });
+
+    this._serviceOptions.on('phone-sorted', (event) => {
+      let sortParam = event.detail;
+      PhoneCatalog.prototype.sortBy(sortParam);
+      console.log(sortParam);
+    });
+    this._serviceOptions.on('phone-filtered', (event) => {
+      let filterParam = event.detail;
+      PhoneCatalog.filterByName(filterParam);
+      console.log(filter,'<-fi');
     });
 
     this._viewer = new PhoneViewer({
@@ -47,5 +58,8 @@ export default class PhonesPage {
       </div>
     `;
   }
+  yell(){
+    this._serviceOptions.getShoppingCart();
+  }  
 
 }

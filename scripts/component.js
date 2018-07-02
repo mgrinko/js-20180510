@@ -36,4 +36,8 @@ export default class Component {
 
     this._element.dispatchEvent(event);
   }
+
+  sortByName(a,b){
+    return a.name - b.name;
+  }
 }

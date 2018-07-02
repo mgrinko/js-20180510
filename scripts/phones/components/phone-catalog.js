@@ -11,13 +11,38 @@ export default class PhoneCatalog extends Component {
     this.on('click', '[data-element="phone"]', (event) => {
       this._onPhoneClick(event);
     });
+    this.on('click', '.phones__btn-buy-wrapper', (event) => {
+      this._phoneAdd(event);
+    });
+    console.log('PhoneCatalog',this);
+
   }
 
   _onPhoneClick(event) {
     let phoneElement = event.delegateTarget;
-
-    this.generateEvent('phone-selected', phoneElement.dataset.phoneId);
+    if(event.target.classList.contains('btn')){
+      this.generateEvent('phone-add', event.delegateTarget.closest('li'));
+    }
+    else{
+      this.generateEvent('phone-selected', phoneElement.dataset.phoneId);
+    }  
   }
+  sortBy(param){
+    console.log('sortBy')
+    this._element.innerHTML = '';
+    switch(param){
+      case "age": this._phones.sort(); break;
+      case "name": this._phones.sortByName(); break;
+    }
+    //this._phones.sortByName();
+    this._render();
+  }
+  filterByName(param){
+    this._element.innerHTML = '';
+    this._phones = this._phones.filter((phone)=>phone.name.toLowerCase().includes(param.toLowerCase()));
+    this._render();
+  }
+
 
   _render() {
     this._element.innerHTML = `
