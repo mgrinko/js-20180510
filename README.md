@@ -3,4 +3,4 @@
 npm install
 node server.js (npm start)
 
-locahost:3000
+localhost:3000
