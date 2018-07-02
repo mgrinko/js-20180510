@@ -25,13 +25,18 @@ export default class PhonesPage {
     });
 
     this._catalogue.on('phone-selected', (event) => {
-      this._handlePhoneSelection(event)
+      this._handlePhoneSelection(event);
     });
   }
 
   _initViewer() {
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+    });
+
+    this._viewer.on('back', () => {
+      this._catalogue.show();
+      this._viewer.hide();
     });
   }
 
