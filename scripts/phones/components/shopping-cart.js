@@ -15,7 +15,7 @@ export default class ShoppingCart extends Component {
   }
 
   addItem(itemToAdd) {
-    this._items.push(item);
+    this._items.push(itemToAdd);
     this._render();
   }
 
