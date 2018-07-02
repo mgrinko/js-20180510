@@ -1,6 +1,7 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneSort from './components/phone-sort.js';
+import PhoneBasket from './components/phone-basket.js';
 import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
@@ -12,6 +13,7 @@ export default class PhonesPage {
     this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
+      phonesAddedToBasket: this.phonesAddedToBasket,
     });
 
     this._catalogue.on('phone-selected', event => {
@@ -31,6 +33,17 @@ export default class PhonesPage {
     this._sort = new PhoneSort({
       element: this._element.querySelector('[data-component="phone-sort"]'),
     });
+
+    this._basket = new PhoneBasket({
+      element: this._element.querySelector('[data-component="phone-basket"]'),
+      phones: this.phonesAddedToBasket,
+    });
+
+    // для добавления телефонов в корзину
+    this.phonesAddedToBasket = [];
+    this.addToBasket = function onAddToBasket(phoneToBasket) {
+      phonesAddedToBasket.push(phoneToBasket);
+    };
 
     this._sort.on('sort-selected', event => {
       let sortBy = event.detail;
@@ -61,12 +74,8 @@ export default class PhonesPage {
         </section>
   
         <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
+          <div class="sidebar-elements" data-component="phone-basket" />
+          
         </section>
       </div>
   
