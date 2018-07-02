@@ -1,19 +1,78 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
+import PhoneSort from './components/phone-sort.js';
+import PhoneSearch from './components/phone-search.js';
+import PhoneBasket from './components/phone-basket.js';
 import PhoneService from './services/phone-service.js';
+import Component from '../component.js';
 
-export default class PhonesPage {
+export default class PhonesPage extends Component {
   constructor({ element }) {
+    super({ element });
     this._element = element;
-
+    this.listPhones = [];
     this._render();
+
+    this._search = new PhoneSearch({
+      element: this._element.querySelector('[data-component="phone-search"]'),
+    });
+
+    this._search.on(
+      'input',
+      '.input-search',
+      this.throttle(event => {
+        const serchValue = event.target.value;
+        let searchPhone = [];
+        if (serchValue) {
+          searchPhone = PhoneService.getPhones().filter(el => {
+            return el.name.toUpperCase().indexOf(serchValue.toUpperCase()) > 0;
+          });
+        }
+        this._catalogue = new PhoneCatalog({
+          element: this._element.querySelector('[data-component="phone-catalog"]'),
+          phones: searchPhone.length > 0 ? searchPhone : PhoneService.getPhones(),
+          addToBasket: this._basket.onAddToBasket,
+        });
+      }, 1100),
+    );
+
+    this._sort = new PhoneSort({
+      element: this._element.querySelector('[data-component="phone-sort"]'),
+    });
+
+    this._basket = new PhoneBasket({
+      element: this._element.querySelector('[data-component="phone-basket"]'),
+      listPhones: this.listPhones,
+    });
+
+    //Удаление телефонов
+    this._basket.on('click', '.basket-remove-item', event => {
+      this._basket.onRemovePhone(event.delegateTarget.dataset.phoneItem);
+    });
+
+    this._sort.on('sort-selected', event => {
+      let sortBy = event.detail;
+
+      let allPhone = PhoneService.getPhones().sort((a, b) => {
+        if (a[sortBy] > b[sortBy]) return 1;
+        if (a[sortBy] < b[sortBy]) return -1;
+      });
+
+      this._catalogue = new PhoneCatalog({
+        element: this._element.querySelector('[data-component="phone-catalog"]'),
+        phones: allPhone,
+        addToBasket: this._basket.onAddToBasket,
+      });
+      console.log(`выбранная сортировка:${sortBy}`);
+    });
 
     this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
+      addToBasket: this._basket.onAddToBasket,
     });
 
-    this._catalogue.on('phone-selected', (event) => {
+    this._catalogue.on('phone-selected', event => {
       let phoneId = event.detail;
       let phoneDetails = PhoneService.getPhone(phoneId);
 
@@ -33,27 +92,14 @@ export default class PhonesPage {
       <!--Sidebar-->
       <div class="col-md-2">
         <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
+          <div class="sidebar-elements" data-component="phone-search" />
         </section>
-  
         <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
+          <div class="sidebar-elements" data-component="phone-sort" />
+        </section>
+        
+        <section>
+          <div class="sidebar-elements" data-component="phone-basket" />
         </section>
       </div>
   
