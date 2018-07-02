@@ -225,6 +225,8 @@ const PhoneService = {
   },
 
   getPhone(phoneId) {
+    //let xhr = new xmlHttpRequest();
+
     return phoneDetails;
   },
 };

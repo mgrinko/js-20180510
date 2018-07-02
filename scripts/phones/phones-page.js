@@ -1,6 +1,7 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
+import ServiceOptions from './components/service-options.js';
 
 export default class PhonesPage {
   constructor({ element }) {
@@ -11,6 +12,10 @@ export default class PhonesPage {
     this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
+    });
+    this._serviceOptions = new ServiceOptions({
+      element: this._element.querySelector('[data-component="service-options"]'),
+      //shoppingCart: this.getShoppingCart()
     });
 
     this._catalogue.on('phone-selected', (event) => {
@@ -23,38 +28,27 @@ export default class PhonesPage {
       console.log(phoneId);
     });
 
+    this._serviceOptions.on('phone-sorted', (event) => {
+      let sortParam = event.detail;
+      PhoneCatalog.prototype.sortBy(sortParam);
+      console.log(sortParam);
+    });
+    this._serviceOptions.on('phone-filtered', (event) => {
+      let filterParam = event.detail;
+      PhoneCatalog.filterByName(filterParam);
+      console.log(filter,'<-fi');
+    });
+
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
+
   }
 
   _render() {
     this._element.innerHTML = `
       <!--Sidebar-->
-      <div class="col-md-2">
-        <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
-        </section>
-  
-        <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
-        </section>
+      <div class="col-md-2" data-component="service-options">      
       </div>
   
       <!--Main content-->
@@ -64,4 +58,8 @@ export default class PhonesPage {
       </div>
     `;
   }
+  yell(){
+    this._serviceOptions.getShoppingCart();
+  }  
+
 }
