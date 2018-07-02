@@ -25,11 +25,7 @@ export default class PhonesPage {
     });
 
     this._catalogue.on('phone-selected', (event) => {
-      let phoneId = event.detail;
-      let phoneDetails = PhoneService.getPhone(phoneId);
-
-      this._catalogue.hide();
-      this._viewer.showPhone(phoneDetails);
+      this._handlePhoneSelection(event)
     });
   }
 
@@ -53,6 +49,14 @@ export default class PhonesPage {
     this._shoppingCart = new ShoppingCart({
       element: this._element.querySelector('[data-component="shopping-cart"]'),
     });
+  }
+
+  _handlePhoneSelection(event) {
+    let phoneId = event.detail;
+    let phoneDetails = PhoneService.getPhone(phoneId);
+
+    this._catalogue.hide();
+    this._viewer.showPhone(phoneDetails);
   }
 
   _render() {
