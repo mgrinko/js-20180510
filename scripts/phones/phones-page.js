@@ -1,6 +1,9 @@
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
+import PhoneSearch from './components/phone-search.js';
+import PhoneSort from './components/phone-sort.js';
+import ShoppingCart from './components/shopping-cart.js';
 
 export default class PhonesPage {
   constructor({ element }) {
@@ -8,23 +11,56 @@ export default class PhonesPage {
 
     this._render();
 
-    this._catalogue = new PhoneCatalog({
+    //каталог    
+    this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getPhones(),
     });
 
-    this._catalogue.on('phone-selected', (event) => {
+    this._catalog.on('phone-selected', (event) => {
       let phoneId = event.detail;
       let phoneDetails = PhoneService.getPhone(phoneId);
 
-      this._catalogue.hide();
+      this._catalog.hide();
       this._viewer.showPhone(phoneDetails);
-
-      console.log(phoneId);
     });
 
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="phone-viewer"]'),
+    });
+
+    //фильтр
+    this._search = new PhoneSearch({
+      element: this._element.querySelector('[data-component="phone-search"]'),
+    });
+
+    this._search.on('phone-searching', (event) => {
+      this._catalog.updatePhones(PhoneService.getMatchedPhones(event.detail));
+    });
+
+    //сортировка
+    this._sort = new PhoneSort({
+      element: this._element.querySelector('[data-component="phone-sort"]'),
+    });
+
+    //TODO это просится в отдельную ф-цию
+    this._catalog.sortPhones("name");
+
+    this._sort.on('phone-sorting', (event) => {
+      this._catalog.sortPhones(event.detail);
+    });
+
+    //корзина
+    this._cart = new ShoppingCart({ 
+      element: this._element.querySelector('[data-component="shopping-cart"]') 
+    });
+
+     this._catalog.on('phone-added', (event) => {
+      this._cart.addPhone(event.detail);
+    });
+
+    this._cart.on('phone-deleted', (event) => {
+      this._cart.delPhone(event.detail);
     });
   }
 
@@ -33,27 +69,13 @@ export default class PhonesPage {
       <!--Sidebar-->
       <div class="col-md-2">
         <section>
-          <p>
-            Search:
-            <input>
-          </p>
-  
-          <p>
-            Sort by:
-            <select>
-              <option value="name">Alphabetical</option>
-              <option value="age">Newest</option>
-            </select>
-          </p>
+          <div data-component="phone-search"></div>
         </section>
-  
         <section>
-          <p>Shopping Cart</p>
-          <ul>
-            <li>Phone 1</li>
-            <li>Phone 2</li>
-            <li>Phone 3</li>
-          </ul>
+          <div data-component="phone-sort"></div>
+        </section>
+        <section>
+          <div data-component="shopping-cart"></div>
         </section>
       </div>
   

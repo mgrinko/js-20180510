@@ -227,6 +227,10 @@ const PhoneService = {
   getPhone(phoneId) {
     return phoneDetails;
   },
+
+  getMatchedPhones(string) {
+    return phones.filter((x) => x.name.toLowerCase().includes(string.toLowerCase()));
+  }
 };
 
 export default PhoneService;
