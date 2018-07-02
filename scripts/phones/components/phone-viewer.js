@@ -8,7 +8,7 @@ export default class PhoneViewer extends Component {
   }
 
   _render(phone) {
-    console.log(phone);
+    //console.log(phone);
     this._element.innerHTML = `
       <img class="phone" src="img/phones/motorola-xoom-with-wi-fi.0.jpg">
 

@@ -23,8 +23,6 @@ export default class PhonesPage {
 
       this._catalog.hide();
       this._viewer.showPhone(phoneDetails);
-
-      console.log(phoneId);
     });
 
     this._viewer = new PhoneViewer({
@@ -56,6 +54,14 @@ export default class PhonesPage {
     this._cart = new ShoppingCart({ 
       element: this._element.querySelector('[data-component="shopping-cart"]') 
     });
+
+     this._catalog.on('phone-added', (event) => {
+      this._cart.addPhone(event.detail);
+    });
+
+    this._cart.on('phone-deleted', (event) => {
+      this._cart.delPhone(event.detail);
+    });
   }
 
   _render() {
@@ -64,9 +70,10 @@ export default class PhonesPage {
       <div class="col-md-2">
         <section>
           <div data-component="phone-search"></div>
+        </section>
+        <section>
           <div data-component="phone-sort"></div>
         </section>
-  
         <section>
           <div data-component="shopping-cart"></div>
         </section>

@@ -14,8 +14,10 @@ export default class PhoneSearch extends Component {
     
       _render() {
         this._element.innerHTML = `
+        <p>
           Search:
           <input>
+        </p>
         `;
     }
 }

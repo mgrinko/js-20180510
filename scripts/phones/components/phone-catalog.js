@@ -6,9 +6,9 @@ export default class PhoneCatalog extends Component {
 
     this._phones = phones;
 
-    this.on('click', '[data-element="phone"]', (event) => {
-      this._onPhoneClick(event);
-    });
+    this._element.addEventListener('click', this._onButtonAddClick.bind(this));
+    this._element.addEventListener('click', this._onPhoneClick.bind(this));
+    
 
     this._render();
   }
@@ -24,19 +24,35 @@ export default class PhoneCatalog extends Component {
   }
 
   _onPhoneClick(event) {
-    let phoneElement = event.delegateTarget;
 
+    if (event.target.closest('[data-element="button-add"]')) {
+      return
+    }
+
+    let phoneElement = event.target.closest('[data-element="phone"]');
     this.trigger('phone-selected', phoneElement.dataset.phoneId);
+  }
+
+  _onButtonAddClick(event) {
+    let buttonAdd = event.target.closest('[data-element="button-add"]');
+
+    if (!buttonAdd) {
+      return;
+    }
+
+    let phoneElement = event.target.closest('[data-element="phone"]');
+    this.trigger('phone-added', phoneElement.dataset.phoneName);
   }
 
   _render() {
     this._element.innerHTML = `
       <ul class="phones">
-        ${this._phones.map(phone => `
+        ${this._phones.map((phone) => `
           
           <li class="thumbnail"
               data-element="phone"
-              data-phone-id="${ phone.id}">
+              data-phone-id="${ phone.id}"
+              data-phone-name="${ phone.name}">
               
             <a href="#!/phones/${ phone.id}" class="thumb">
               <img
@@ -46,7 +62,7 @@ export default class PhoneCatalog extends Component {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a class="btn btn-success" data-element="button-add">
                 Add
               </a>
             </div>
