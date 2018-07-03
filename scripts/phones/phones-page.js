@@ -1,115 +1,109 @@
+import PhoneService from './services/phone-service.js';
+
+import PhoneFilters from './components/phone-filters.js';
+import ShoppingCart from './components/shopping-cart.js';
 import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
-import PhoneService from './services/phone-service.js';
-import ShoppingCart from './components/shopping-cart.js';
-import PhoneSort from './services/phone-sort.js';
-import PhoneSearch from './components/phone-search.js';
-import Component from '../component.js';
 
-export default class PhonesPage extends Component {
 
-    constructor({ element }) {
-        super({ element });
+export default class PhonesPage {
+  constructor({ element }) {
+    this._element = element;
 
-        this._render();
+    this._render();
 
-        this._catalogue = new PhoneCatalog({
-            element: this._element.querySelector('[data-component="phone-catalog"]'),
-            phones: PhoneService.getPhones()
-        });
+    this._initCatalog();
+    this._initViewer();
+    this._initFilters();
+    this._initShoppingCart();
+  }
 
-        this._viewer = new PhoneViewer({
-            element: this._element.querySelector('[data-component="phone-viewer"]'),
-        });
+  _initCatalog() {
+    this._catalogue = new PhoneCatalog({
+      element: this._element.querySelector('[data-component="phone-catalog"]'),
+    });
 
-        this._cart = new ShoppingCart({
-            element: this._element.querySelector('[data-component="shopping-cart"]')
-        });
+    this._catalogue.on('phone-selected', (event) => {
+      let phoneId = event.detail;
 
-        this._addEvents();
-    }
+      PhoneService.getPhone(phoneId, (phoneDetails) => {
+        this._catalogue.hide();
+        this._viewer.showPhone(phoneDetails);
+      });
+    });
 
-    _addEvents() {
-        // Sort
-        this.on('change', '#sort', (event) => {
-            const field = event.delegateTarget.value;
+    this._catalogue.on('add', (event) => {
+      let phoneId = event.detail;
 
-            PhoneSort.sort({
-                element: this._element,
-                by: field
-            });
-        });
+      this._shoppingCart.addItem(phoneId);
+    });
 
-        // Search
-        this.on('keyup', '#search', (event) => {
-            PhoneSearch.filter({
-                element: this._element,
-                value: event.delegateTarget.value,
-                by: [
-                    '.js-filter-name',
-                    '.js-filter-description'
-                ]
-            });
-        });
+    PhoneService.getPhones({
+      successCallback: (phones) => {
+        this._catalogue.showPhones(phones);
+      }
+    });
+  }
 
-        // Go to detail view
-        this._catalogue.on('phone-selected', (event) => {
-            let phoneId = event.detail;
-            let phoneDetails = PhoneService.getPhone(phoneId);
+  _initViewer() {
+    this._viewer = new PhoneViewer({
+      element: this._element.querySelector('[data-component="phone-viewer"]'),
+    });
 
-            this._catalogue.hide();
-            this._viewer.showPhone(phoneDetails);
-        });
+    this._viewer.on('back', () => {
+      this._catalogue.show();
+      this._viewer.hide();
+    });
 
-        // Add to cart in catalogue
-        this._catalogue.on('phone-add-to-cart', (event) => {
-            let phoneName = event.detail;
+    this._viewer.on('add', (event) => {
+      let phoneId = event.detail;
 
-            this._cart.add(phoneName);
-        });
+      this._shoppingCart.addItem(phoneId);
+    });
+  }
 
-        // Add to cart in detail view
-        this._viewer.on('phone-add-to-cart', (event) => {
-            let phoneName = event.detail;
+  _initFilters() {
+    this._filters = new PhoneFilters({
+      element: this._element.querySelector('[data-component="phone-filters"]'),
+    });
 
-            this._cart.add(phoneName);
-        });
+    this._filters.on('sort', (event) => {
+      let sortedPhones = PhoneService.getPhones({ order: event.detail });
 
-        // Back to catalogue from viewer
-        this._viewer.on('back-to-catalogue', () => {
-            this._viewer.hide();
-            this._catalogue.show();
-        });
-    }
+      this._catalogue.showPhones(sortedPhones);
+    });
 
-    _render() {
-        this._element.innerHTML = `
-            <!--Sidebar-->
-            <div class="col-md-2">
-                <section>
-                    <p>
-                        <span>Search:</span>
-                        <input id="search">
-                    </p>
-                
-                    <p>
-                        <span>Sort by:</span>
-                        <select id="sort">
-                            <option value="name">Alphabetical</option>
-                            <option value="age">Newest</option>
-                        </select>
-                    </p>
-                </section>
-                
-                <section data-component="shopping-cart"></section>
-            </div>
-            
-            <!--Main content-->
-            <div class="col-md-10">
-                <div data-component="phone-catalog"></div>
-                <div data-component="phone-viewer" class="js-hidden"></div>
-            </div>
-        `;
-    }
+    this._filters.on('search', (event) => {
+      let sortedPhones = PhoneService.getPhones({ query: event.detail });
 
+      this._catalogue.showPhones(sortedPhones);
+    });
+  }
+
+  _initShoppingCart() {
+    this._shoppingCart = new ShoppingCart({
+      element: this._element.querySelector('[data-component="shopping-cart"]'),
+    });
+  }
+
+  _render() {
+    this._element.innerHTML = `
+      <!--Sidebar-->
+      <div class="col-md-2">
+        <section>
+          <div data-component="phone-filters"></div>  
+        </section>
+  
+        <section>
+          <div data-component="shopping-cart"></div>  
+        </section>
+      </div>
+  
+      <!--Main content-->
+      <div class="col-md-10">
+        <div data-component="phone-catalog"></div>
+        <div data-component="phone-viewer" class="js-hidden"></div>
+      </div>
+    `;
+  }
 }
