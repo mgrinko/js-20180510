@@ -18,7 +18,8 @@ export default class PhoneViewer extends Component {
   }
 
   showPhone(phoneDetails) {
-    this._render(phoneDetails);
+    this._phone = phoneDetails;
+    this._render(this._phone);
     this.show();
   }
 
@@ -28,14 +29,12 @@ export default class PhoneViewer extends Component {
 
       <button data-element="back-button">Back</button>
       <button data-element="add-button">Add to basket</button>
-  
-  
+
       <h1>${phone.name}</h1>
   
       <p>${phone.description}</p>
   
       <ul class="phone-thumbs">
-          
       ${phone.images
         .map(
           img => `
