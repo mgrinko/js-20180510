@@ -68,15 +68,21 @@ export default class PhonesPage {
     });
 
     this._filters.on('sort', event => {
-      let sortedPhones = PhoneService.getPhones({ order: event.detail });
-
-      this._catalogue.showPhones(sortedPhones);
+      PhoneService.getPhones({
+        order: event.detail,
+        successCallback: phones => {
+          this._catalogue.showPhones(phones);
+        },
+      });
     });
 
     this._filters.on('search', event => {
-      let sortedPhones = PhoneService.getPhones({ query: event.detail });
-
-      this._catalogue.showPhones(sortedPhones);
+      PhoneService.getPhones({
+        query: event.detail,
+        successCallback: phones => {
+          this._catalogue.showPhones(phones);
+        },
+      });
     });
   }
 
