@@ -1,0 +1,23 @@
+{
+  "name": "js-20180510",
+  "version": "1.0.0",
+  "description": "You can use the [editor on GitHub](https://github.com/ArtfulAngel/js-20180510/edit/gh-pages/README.md) to maintain and preview the content for your website in Markdown files.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtfulAngel/js-20180510.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArtfulAngel/js-20180510/issues"
+  },
+  "homepage": "https://github.com/ArtfulAngel/js-20180510#readme",
+  "devDependencies": {
+    "node-static": "^0.7.10"
+  }
+}
