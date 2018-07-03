@@ -2,12 +2,11 @@ import PhoneCatalog from './components/phone-catalog.js';
 import PhoneViewer from './components/phone-viewer.js';
 import PhoneFilters from './components/phone-filters.js';
 import PhoneBasket from './components/phone-basket.js';
-import PhoneService from './services/phone-service.js';
-import Component from '../component.js';
 
-export default class PhonesPage extends Component {
+import PhoneService from './services/phone-service.js';
+
+export default class PhonesPage {
   constructor({ element }) {
-    super({ element });
     this._element = element;
 
     this._render();
@@ -21,21 +20,29 @@ export default class PhonesPage extends Component {
   _initCatalog() {
     this._catalogue = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
-      phones: PhoneService.getPhones(),
     });
 
     this._catalogue.on('phone-selected', event => {
       let phoneId = event.detail;
-      let phoneDetails = PhoneService.getPhone(phoneId);
 
-      this._catalogue.hide();
-      this._viewer.showPhone(phoneDetails);
+      // для просмотра конкретного телефона
+      PhoneService.getPhone(phoneId, phoneDetails => {
+        this._catalogue.hide();
+        this._viewer.showPhone(phoneDetails);
+      });
     });
 
     this._catalogue.on('add', event => {
       let phoneId = event.detail;
 
       this._basket.onAddToBasket(phoneId);
+    });
+
+    // для получения всего списка телефонов
+    PhoneService.getPhones({
+      successCallback: phones => {
+        this._catalogue.showPhones(phones);
+      },
     });
   }
 
