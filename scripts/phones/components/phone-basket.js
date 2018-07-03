@@ -9,21 +9,18 @@ export default class PhoneBasket extends Component {
       this._render();
     }
 
-    //Удаление телефонов
+    //Удаление телефонов из корзины
     this.on('click', '[data-element="basket-remove-item"]', event => {
-      this.onRemovePhone(event.delegateTarget.dataset.phoneItem);
+      let phoneItem = event.delegateTarget.dataset.phoneItem;
+
+      this._listPhones.delete(phoneItem);
+      this._render();
     });
   }
 
   //добавление в корзину
   onAddToBasket(phoneItem) {
     this._listPhones.add(phoneItem);
-    this._render();
-  }
-
-  // удаление из корзины
-  onRemovePhone(phoneItem) {
-    this._listPhones.delete(phoneItem);
     this._render();
   }
 
@@ -39,7 +36,7 @@ export default class PhoneBasket extends Component {
               <div >${phone}</div> 
               <div class="basket-remove-item" 
               data-element="basket-remove-item"
-              data-phone-item="${index}">[X]</div>
+              data-phone-item="${phone}">[X]</div>
             </li>
             
             `,
