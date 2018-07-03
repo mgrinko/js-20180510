@@ -1,4 +1,4 @@
-const BASE_URL = '/api';
+const BASE_URL = 'https://artfulangel.github.io/js-20180510/api';
 
 const HttpService = {
   sendRequest(
