@@ -3,9 +3,9 @@ import Component from '../../component.js';
 export default class PhoneBasket extends Component {
   constructor({ element }) {
     super({ element });
-    this._listPhones = [];
+    this._listPhones = new Set();
 
-    if (this._listPhones) {
+    if (this._listPhones.lenght > 0) {
       this._render();
     }
 
@@ -16,34 +16,27 @@ export default class PhoneBasket extends Component {
   }
 
   //добавление в корзину
-  onAddToBasket(phoneToBasket) {
-    // переменная для проверки телефона в корзине
-    const isEmpty = this._listPhones.includes(el => {
-      if (el.name === phoneToBasket) {
-        return true;
-      }
-    });
-    // если телефона нет в корзине, то добалвяем
-    if (!isEmpty) {
-      this._listPhones.push({ name: phoneToBasket });
-      this._render();
-    }
+  onAddToBasket(phoneItem) {
+    this._listPhones.add(phoneItem);
+    this._render();
   }
 
   // удаление из корзины
-  onRemovePhone(phoneIndex) {
-    this._listPhones.splice(phoneIndex, 1);
+  onRemovePhone(phoneItem) {
+    this._listPhones.delete(phoneItem);
     this._render();
   }
 
   _render() {
+    const phoneItems = Array.from(this._listPhones);
+
     this._element.innerHTML = `<p>Shopping Cart</p>
         <ul>
-          ${this._listPhones
+          ${phoneItems
             .map(
               (phone, index) => `
             <li>
-              <div >${phone.name}</div> 
+              <div >${phone}</div> 
               <div class="basket-remove-item" 
               data-element="basket-remove-item"
               data-phone-item="${index}">[X]</div>
