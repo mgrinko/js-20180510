@@ -3,7 +3,7 @@ var static = require('node-static');
 var file = new static.Server('.', {
   cache: 0,
   headers: {
-    'Access-Control-Allow-Origin': 'https://artfulangel.github.io',
+    'Access-Control-Allow-Origin': 'https://artfulangel.github.io/js-20180510/',
     'Access-Control-Allow-Methods': 'GET,PUT',
     'Access-Control-Allow-Headers': 'Content-Type',
   },
