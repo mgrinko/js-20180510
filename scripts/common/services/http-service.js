@@ -1,4 +1,4 @@
-const BASE_URL = 'https://artfulangel.github.io/js-20180510/api';
+const BASE_URL = 'https://localhost:3000/api';
 
 const HttpService = {
   sendRequest(
