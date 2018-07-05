@@ -2,17 +2,17 @@ const BASE_URL = 'https://mgrinko.github.io/js-20180510/api/';
 // const BASE_URL = 'http://localhost:3000/api/';
 
 const HttpService = {
-  sendRequest(url, {
-    method = 'GET',
+  sendRequest(
+    url,
     onSuccess = () => {},
     onError = (error) => {
       console.error(error);
-    },
-  }) {
+    }
+  ) {
     let xhr = new XMLHttpRequest();
     let fullUrl = `${BASE_URL}${url}.json`;
 
-    xhr.open(method, fullUrl , true);
+    xhr.open('GET', fullUrl , true);
     xhr.send();
 
     xhr.onload = ()=> {
