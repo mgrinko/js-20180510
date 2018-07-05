@@ -26,11 +26,7 @@ export default class PhonesPage {
     this._catalogue.on('phone-selected', (event) => {
       let phoneId = event.detail;
 
-      PhoneService.getPhone(phoneId)
-        .then((phoneDetails) => {
-          this._catalogue.hide();
-          this._viewer.showPhone(phoneDetails);
-        });
+      this.onPhoneSelected(phoneId);
     });
 
     this._catalogue.on('add', (event) => {
@@ -42,6 +38,22 @@ export default class PhonesPage {
     PhoneService.getPhones()
       .then((phones) => {
         this._catalogue.showPhones(phones);
+      });
+  }
+
+  onPhoneSelected(phoneId) {
+    let loadPhonePromise = PhoneService.getPhone(phoneId);
+    let rightClickPromise = new Promise((resolve, reject) => {
+      document.addEventListener('contextmenu', resolve);
+    });
+
+    // Promise.all([loadPhonePromise, rightClickPromise])
+
+    rightClickPromise
+      .then(() => loadPhonePromise)
+      .then((phoneDetails) => {
+        this._catalogue.hide();
+        this._viewer.showPhone(phoneDetails);
       });
   }
 
