@@ -1,0 +1,23 @@
+{
+  "name": "js-20180510",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgrinko/js-20180510.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mgrinko/js-20180510/issues"
+  },
+  "homepage": "https://github.com/mgrinko/js-20180510#readme",
+  "devDependencies": {
+    "node-static": "^0.7.10"
+  }
+}

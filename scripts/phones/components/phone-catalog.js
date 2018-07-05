@@ -1,22 +1,29 @@
 import Component from '../../component.js';
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones }) {
+  constructor({ element }) {
     super({ element });
 
-    this._phones = phones;
+    this._phones = [];
 
     this._render();
 
-    this.on('click', '[data-element="phone"]', (event) => {
-      this._onPhoneClick(event);
+    this.on('click', '[data-element="details-link"]', (event) => {
+      let phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+
+      this.trigger('phone-selected', phoneElement.dataset.phoneId);
+    });
+
+    this.on('click', '[data-element="add-button"]', (event) => {
+      let phoneElement = event.delegateTarget.closest('[data-element="phone"]');
+
+      this.trigger('add', phoneElement.dataset.phoneId);
     });
   }
 
-  _onPhoneClick(event) {
-    let phoneElement = event.delegateTarget;
-
-    this.trigger('phone-selected', phoneElement.dataset.phoneId);
+  showPhones(phones) {
+    this._phones = phones;
+    this._render();
   }
 
   _render() {
@@ -28,7 +35,11 @@ export default class PhoneCatalog extends Component {
               data-element="phone"
               data-phone-id="${ phone.id }">
               
-            <a href="#!/phones/${ phone.id }" class="thumb">
+            <a
+              data-element="details-link"
+              href="#!/phones/${ phone.id }"
+              class="thumb"
+            >
               <img
                 alt="${ phone.name }"
                 src="${ phone.imageUrl }"
@@ -36,12 +47,21 @@ export default class PhoneCatalog extends Component {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a
+                data-element="add-button"
+                class="btn btn-success"
+              >
                 Add
               </a>
             </div>
   
-            <a href="#!/phones/${ phone.id }">${ phone.name }</a>
+            <a
+              href="#!/phones/${ phone.id }"
+              data-element="details-link"
+            >
+              ${ phone.name }
+            </a>
+            
             <p>${ phone.snippet }</p>
           </li>
         
