@@ -3,7 +3,7 @@ import HttpService from '../../common/services/http-service.js';
 const PhoneService = {
   getPhones({ order, query, successCallback } = {}) {
 
-    HttpService.sendRequest('/phones', {
+    HttpService.sendRequest('phones', {
       onSuccess: (phones) => {
         let filteredPhones = phones;
 
@@ -28,9 +28,9 @@ const PhoneService = {
   },
 
   getPhone(phoneId, successCallback) {
-    HttpService.sendRequest(`/phones/${phoneId}`, {
+    HttpService.sendRequest(`phones/${phoneId}`, {
       onSuccess: successCallback,
-    })
+    });
   },
 };
 
