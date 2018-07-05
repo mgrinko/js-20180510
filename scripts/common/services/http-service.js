@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://mgrinko.github.io/js-20180510/api/';
-const BASE_URL = 'http://localhost:3000/api/';
+const BASE_URL = 'https://mgrinko.github.io/js-20180510/api/';
+// const BASE_URL = 'http://localhost:3000/api/';
 
 const HttpService = {
   sendRequest(url, {
