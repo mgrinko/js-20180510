@@ -1,10 +1,5 @@
 /* app css stylesheet */
 
-.cart__remove-phone {
-    color: #CC0000;
-    cursor: pointer;
-}
-
 .js-hidden {
   display: none;
 }

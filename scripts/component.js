@@ -1,38 +1,39 @@
 export default class Component {
-    constructor({ element }) {
-        this._element = element;
+  constructor({ element }) {
+    this._element = element;
+  }
+
+  show() {
+    this._element.classList.remove('js-hidden');
+  }
+
+  hide() {
+    this._element.classList.add('js-hidden');
+  }
+
+  on(eventName, selector, handler) {
+    if (!handler) {
+      this._element.addEventListener(eventName, selector);
+
+      return;
     }
 
-    show() {
-        this._element.classList.remove('js-hidden');
-    }
+    this._element.addEventListener(eventName, (event) => {
+      let delegateTarget = event.target.closest(selector);
 
-    hide() {
-        this._element.classList.add('js-hidden');
-    }
+      if (!delegateTarget || !this._element.contains(delegateTarget)) {
+        return;
+      }
 
-    on(eventName, selector, handler) {
-        if (!handler) {
-            this._element.addEventListener(eventName, selector);
-            return;
-        }
+      event.delegateTarget = delegateTarget;
 
-        this._element.addEventListener(eventName, (event) => {
-            let delegateTarget = event.target.closest(selector);
+      handler(event);
+    });
+  }
 
-            if (!delegateTarget || !this._element.contains(delegateTarget)) {
-                return;
-            }
+  trigger(eventName, detail) {
+    let event = new CustomEvent(eventName, { detail });
 
-            event.delegateTarget = delegateTarget;
-
-            handler(event);
-        });
-    }
-
-    trigger(eventName, detail) {
-        let event = new CustomEvent(eventName, { detail });
-        this._element.dispatchEvent(event);
-    }
-
+    this._element.dispatchEvent(event);
+  }
 }
