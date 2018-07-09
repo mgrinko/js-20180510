@@ -41,20 +41,11 @@ export default class PhonesPage {
       });
   }
 
-  onPhoneSelected(phoneId) {
-    let loadPhonePromise = PhoneService.getPhone(phoneId);
-    let rightClickPromise = new Promise((resolve, reject) => {
-      document.addEventListener('contextmenu', resolve);
-    });
+  async onPhoneSelected(phoneId) {
+    let phoneDetails = await PhoneService.getPhone(phoneId);
 
-    // Promise.all([loadPhonePromise, rightClickPromise])
-
-    rightClickPromise
-      .then(() => loadPhonePromise)
-      .then((phoneDetails) => {
-        this._catalogue.hide();
-        this._viewer.showPhone(phoneDetails);
-      });
+    this._catalogue.hide();
+    this._viewer.showPhone(phoneDetails);
   }
 
   _initViewer() {
@@ -79,11 +70,10 @@ export default class PhonesPage {
       element: this._element.querySelector('[data-component="phone-filters"]'),
     });
 
-    this._filters.on('sort', (event) => {
-      PhoneService.getPhones({ order: event.detail })
-        .then((sortedPhones) => {
-          this._catalogue.showPhones(sortedPhones);
-        });
+    this._filters.on('sort', async (event) => {
+      let sortedPhones = await PhoneService.getPhones({ order: event.detail });
+
+      this._catalogue.showPhones(sortedPhones);
     });
 
     this._filters.on('search', (event) => {

@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "./node_modules/.bin/webpack-cli"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/mgrinko/js-20180510#readme",
   "devDependencies": {
-    "node-static": "^0.7.10"
+    "node-static": "^0.7.10",
+    "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8"
   }
 }
