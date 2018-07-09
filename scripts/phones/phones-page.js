@@ -26,10 +26,7 @@ export default class PhonesPage {
     this._catalogue.on('phone-selected', (event) => {
       let phoneId = event.detail;
 
-      PhoneService.getPhone(phoneId, (phoneDetails) => {
-        this._catalogue.hide();
-        this._viewer.showPhone(phoneDetails);
-      });
+      this.onPhoneSelected(phoneId);
     });
 
     this._catalogue.on('add', (event) => {
@@ -38,11 +35,26 @@ export default class PhonesPage {
       this._shoppingCart.addItem(phoneId);
     });
 
-    PhoneService.getPhones({
-      successCallback: (phones) => {
+    PhoneService.getPhones()
+      .then((phones) => {
         this._catalogue.showPhones(phones);
-      }
+      });
+  }
+
+  onPhoneSelected(phoneId) {
+    let loadPhonePromise = PhoneService.getPhone(phoneId);
+    let rightClickPromise = new Promise((resolve, reject) => {
+      document.addEventListener('contextmenu', resolve);
     });
+
+    // Promise.all([loadPhonePromise, rightClickPromise])
+
+    rightClickPromise
+      .then(() => loadPhonePromise)
+      .then((phoneDetails) => {
+        this._catalogue.hide();
+        this._viewer.showPhone(phoneDetails);
+      });
   }
 
   _initViewer() {
@@ -68,15 +80,17 @@ export default class PhonesPage {
     });
 
     this._filters.on('sort', (event) => {
-      let sortedPhones = PhoneService.getPhones({ order: event.detail });
-
-      this._catalogue.showPhones(sortedPhones);
+      PhoneService.getPhones({ order: event.detail })
+        .then((sortedPhones) => {
+          this._catalogue.showPhones(sortedPhones);
+        });
     });
 
     this._filters.on('search', (event) => {
-      let sortedPhones = PhoneService.getPhones({ query: event.detail });
-
-      this._catalogue.showPhones(sortedPhones);
+      PhoneService.getPhones({ query: event.detail })
+        .then((sortedPhones) => {
+          this._catalogue.showPhones(sortedPhones);
+        });
     });
   }
 
