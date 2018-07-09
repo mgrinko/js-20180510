@@ -1,4 +1,4 @@
-const BASE_URL = 'https://mgrinko.github.io/js-20180510/api/';
+// const BASE_URL = 'https://mgrinko.github.io/js-20180510/api/';
 // const BASE_URL = 'http://localhost:3000/api/';
 
 const HttpService = {
@@ -6,7 +6,7 @@ const HttpService = {
     return new Promise((resolve, reject) => {
 
       let xhr = new XMLHttpRequest();
-      let fullUrl = `${BASE_URL}${url}.json`;
+      let fullUrl = `${'https://mgrinko.github.io/js-20180510/api/'}${url}.json`;
 
       xhr.open('GET', fullUrl , true);
       xhr.send();
