@@ -1,4 +1,6 @@
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const development = process.env.NODE_ENV === 'development';
 
 module.exports = {
   mode: 'none',
@@ -7,8 +9,31 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: 'build.js'
   },
-  watch: true,
-  devtool: 'source-map',
+  watch: development,
+  devtool: development ? 'source-map' : false,
+
+
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-transform-runtime'],
+          }
+        }
+      }
+    ]
+  },
+
+  plugins: [
+    new UglifyJsPlugin({
+      sourceMap: development ? true : false,
+    })
+  ],
 };
 
 
