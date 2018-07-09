@@ -11,9 +11,7 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: 'build.js'
   },
-  watch: development,
   devtool: development ? 'source-map' : false,
-
 
   module: {
     rules: [
@@ -32,6 +30,10 @@ module.exports = {
         test: /\.hbs/,
         loader: "handlebars-loader"
       },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      }
     ]
   },
 
@@ -45,6 +47,10 @@ module.exports = {
         : "'https://mgrinko.github.io/js-20180510/api/'",
     }),
   ],
+
+  devServer: {
+    contentBase: './public'
+  },
 };
 
 
