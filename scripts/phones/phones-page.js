@@ -3,7 +3,7 @@ import PhoneService from './services/phone-service.js';
 import PhoneFilters from './components/phone-filters.js';
 import ShoppingCart from './components/shopping-cart.js';
 import PhoneCatalog from './components/phone-catalog.js';
-import PhoneViewer from './components/phone-viewer.js';
+import PhoneViewer from './components/phone-viewer/phone-viewer.js';
 
 
 export default class PhonesPage {

@@ -1,4 +1,8 @@
-import Component from '../../component.js';
+import Component from '../../../component.js';
+
+import templateFunction from './phone-viewer.hbs';
+console.log(templateFunction);
+
 
 export default class PhoneViewer extends Component {
 
@@ -28,33 +32,8 @@ export default class PhoneViewer extends Component {
   }
 
   _render(phone) {
-    this._element.innerHTML = `
-      <img
-        data-element="large-image"
-        class="phone"
-        src="${ phone.images[0] }"
-      >
-
-      <button data-element="back-button">Back</button>
-      <button data-element="add-button">Add to basket</button>
-  
-  
-      <h1>${ phone.name }</h1>
-  
-      <p>${ phone.description }</p>
-  
-      <ul class="phone-thumbs">
-        ${ phone.images.map(imageUrl => `
-
-          <li>
-            <img
-              src="${ imageUrl }"
-              data-element="small-image"
-            >
-          </li>
-        
-        `).join('')}
-      </ul>
-    `;
+    this._element.innerHTML = templateFunction({
+      phone: phone,
+    });
   }
 }

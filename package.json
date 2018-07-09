@@ -24,11 +24,14 @@
     "@babel/preset-env": "^7.0.0-beta.52",
     "babel-loader": "^8.0.0-beta.4",
     "node-static": "^0.7.10",
+    "raw-loader": "^0.5.1",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.52"
+    "@babel/runtime": "^7.0.0-beta.52",
+    "handlebars": "^4.0.11",
+    "handlebars-loader": "^1.7.0"
   }
 }
